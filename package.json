@@ -1,0 +1,19 @@
+{
+  "name": "tiy-week7-stat-tracker",
+  "version": "1.0.0",
+  "description": "Build a stat tracker fullstack app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/b-r-broge/tiy-week7-stat-tracker.git"
+  },
+  "author": "b-r-broge",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/b-r-broge/tiy-week7-stat-tracker/issues"
+  },
+  "homepage": "https://github.com/b-r-broge/tiy-week7-stat-tracker#readme"
+}
