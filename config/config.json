@@ -1,0 +1,8 @@
+{
+    "dev": {
+        "mongoUrl": "mongodb://localhost:27017/statTrack"
+    },
+    "test": {
+        "mongoUrl": "mongodb://localhost:27017/testStatTrack"
+    }
+}
