@@ -13,8 +13,8 @@ const statsRoute = require('./routes/stats');
 mongoose.Promise = require('bluebird');
 mongoose.connect(config.mongoUrl);
 
-app.use(authRoute);
-app.use(statsRoute);
+app.use('/api', authRoute);
+app.use('/api', statsRoute);
 
 if (require.main === module) {
   app.listen(3000, function () {

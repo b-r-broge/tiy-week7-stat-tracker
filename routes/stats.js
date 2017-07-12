@@ -1,9 +1,9 @@
 const express = require('express');
-const router = express.Router
+const router = express.Router();
 
-const userModel = require('../models/users')
-const activityModel = require('../models/activities')
-const statsModel = require('../models/stats')
+const Users = require('../models/users')
+const Activities = require('../models/activities')
+const Stats = require('../models/stats')
 
 
 
