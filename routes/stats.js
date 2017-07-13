@@ -68,7 +68,7 @@ router.get('/activity', function (req, res) {
       activities.map(function(a) {
         activOut.push({
           "activity": a.activityName,
-          "activityId": a.activityId
+          "activityLink": "/api/activity/" + a.activityId
         })
       })
       res.json({

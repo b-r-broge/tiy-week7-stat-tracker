@@ -123,11 +123,11 @@ describe("GET /api/activity", function () {
       "activities": [
         {
           "activity": "barking",
-          "activityId": 0
+          "activityLink": "/api/activity/0"
         },
         {
           "activity": "sleeping",
-          "activityId": 2
+          "activityLink": "/api/activity/2"
         }
       ]
     })
@@ -143,11 +143,14 @@ describe("GET /api/activity", function () {
       "activities": [
         {
           "activity": "sleeping",
-          "activityId": 1
+          "activityLink": "/api/activity/1"
         }
       ]
     })
     .end(done);
   })
-
 })
+
+// describe('GET /activities/:id', function() {
+//   it('should return information')
+// })
