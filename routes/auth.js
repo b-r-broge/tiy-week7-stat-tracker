@@ -30,10 +30,6 @@ passport.use('basic', new BasicStrategy(
       if (!isValid(user.password, password)) {
         return done(null, false);
       }
-      // var hash = bcrypt.hashSync(password, 8)
-      // if (!bcrypt.compareSync(user.password, hash)) {
-      //   return done(null, false);
-      // }
       return done(null, user);
     });
   }
@@ -44,7 +40,6 @@ router.post('/signup', function(req, res) {
   // calculate uuid, and then add them to the database
   // res.json({"incomplete": true})
   Users.count({}, function(err, num) {
-    // var passHash = bCrypt.hashSync(req.body.password, 8)
     var newUser = new Users({
       "username": req.body.username,
       "password": req.body.password,
@@ -65,7 +60,7 @@ router.post('/signup', function(req, res) {
   })
 })
 
-// can probably put the passport.authenticate into this use?
+// authenticate before using the stats routes
 router.use( passport.authenticate('basic', {
   session: false
 }), statsRoute)

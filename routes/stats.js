@@ -56,4 +56,33 @@ router.post('/activity', function(req, res) {
   });
 })
 
+router.get('/activity', function (req, res) {
+  console.log('getting activities for', req.user.username);
+  Users.findOne({
+    "username": req.user.username
+  }).then(function(user) {
+    Activity.find({
+      "userId": user.uuid
+    }).then(function(activities) {
+      var activOut = []
+      activities.map(function(a) {
+        activOut.push({
+          "activity": a.activityName,
+          "activityId": a.activityId
+        })
+      })
+      res.json({
+        "success": true,
+        "activities": activOut
+      })
+    }).catch(function(err) {
+      console.log("Error getting all activities", err);
+      res.json(err);
+    })
+  }).catch(function(err) {
+    console.log(("Error getting user", err));
+    res.json(err);
+  })
+})
+
 module.exports = router;
