@@ -11,9 +11,9 @@ const bcrypt = require('bcryptjs');
 // https://github.com/jaredhanson/passport-http
 // AND
 // https://www.npmjs.com/package/bcryptjs
-passport.use(new BasicStrategy(
+passport.use('basic', new BasicStrategy(
   function(user, password, done) {
-    User.findOne({
+    Users.findOne({
       username: user
     }, function(err, user) {
       if (err) {
@@ -57,5 +57,18 @@ router.post('/signup', function(req, res) {
   })
 })
 
+// router.all('/invalid', function(req, res) {
+//   res.status(401).json({
+//     "success": false,
+//     "error": "Incorrect Username or Password"
+//   })
+// })
+//
+// router.use('/*', passport.authenticate('basic', {
+//   session: false
+// }), function(req, res, next) {
+//   console.log('checking credentials');
+//   next();
+// })
 
 module.exports = router;
