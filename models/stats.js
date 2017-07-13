@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const statsSchema = new Schema({
   date: {
-    type: Date,
+    type: String,
     required: true
   },
   numberPerformed: {

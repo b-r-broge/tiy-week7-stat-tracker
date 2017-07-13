@@ -6,14 +6,58 @@ const Users = require('../models/users');
 const Activity = require('../models/activities');
 const Stats = require('../models/stats');
 
-// Skip authentication for now, get the rest of the
-// end points working before trying it again.
-//
 router.get('/check', function (req, res) {
   console.log('in check function');
   res.json({
     "success": true,
     "username": req.user.username
+  })
+})
+
+router.post('/activity/:id/stats', function (req, res) {
+  // add a new stat to an activity, verify the user owns
+  // the activity before adding to db
+  Users.findOne({
+    "username": req.user.username
+  }).then(function(user) {
+    Activity.findOne({
+      "activityId": req.params.id
+    }).then(function(activity) {
+      if (!activity) {
+        return res.json({
+          "success": false,
+          "error": "activity does not exist"
+        })
+      }
+      if (activity.userId !== user.uuid) {
+        return res.status(401).json({
+          "success": false,
+          "error": "Not Authorized"
+        })
+      }
+      var newStat = new Stats({
+        "date": req.body.date,
+        "numberPerformed": req.body.numberPerformed,
+        "activityId": req.params.id,
+        "userId": user.uuid
+      })
+      newStat.save().then(function(stat) {
+        return res.json({
+          "success": true,
+          "date": stat.date,
+          "numberPerformed": stat.numberPerformed
+        })
+      }).catch(function(err) {
+        console.log('error saving new stat', err);
+        res.json(err);
+      })
+    }).catch(function(err) {
+      console.log('error finding activity', err);
+      res.json(err);
+    })
+  }).catch(function(err) {
+    console.log("error finding user", err);
+    res.json(err);
   })
 })
 
@@ -41,9 +85,9 @@ router.post('/activity', function(req, res) {
       })
       newActivity.save().then(function(newActiv) {
         console.log('activity added:', req.body.activity);
-        res.json({
+        return res.json({
           "success": true,
-          "activity": req.body.activity
+          "activity": newActiv.activityName
         })
       }).catch(function(err) {
         console.log('error saving new activity', err);
@@ -71,7 +115,7 @@ router.get('/activity', function (req, res) {
           "activityLink": "/api/activity/" + a.activityId
         })
       })
-      res.json({
+      return res.json({
         "success": true,
         "activities": activOut
       })
@@ -84,5 +128,7 @@ router.get('/activity', function (req, res) {
     res.json(err);
   })
 })
+
+
 
 module.exports = router;

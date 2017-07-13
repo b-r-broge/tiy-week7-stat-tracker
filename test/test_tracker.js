@@ -151,6 +151,93 @@ describe("GET /api/activity", function () {
   })
 })
 
-// describe('GET /activities/:id', function() {
-//   it('should return information')
-// })
+describe('POST /activity/:id/stats', function() {
+  it('should deny modifiying an activity you don\'t own', function (done) {
+    request(app).post('/api/activity/1/stats')
+    .auth("Reynard", "l3tsB4rkMor3")
+    .send({
+      "date": "7/11/17",
+      "numberPerformed": 12
+    })
+    .expect(401)
+    .end(done)
+  })
+  it('should deny modifiying an activity when you don\'t authorize', function (done) {
+    request(app).post('/api/activity/1/stats')
+    .send({
+      "date": "7/11/17",
+      "numberPerformed": 12
+    })
+    .expect(401)
+    .end(done)
+  })
+  it('Should stop you to adding a stat for an invalid activity', function (done) {
+    request(app).post('/api/activity/5/stats')
+    .auth("Reynard", "l3tsB4rkMor3")
+    .send({
+      "date": "7/11/17",
+      "numberPerformed": 12
+    })
+    .expect({
+      "success": false,
+      "error": "activity does not exist"
+    })
+    .end(done)
+  })
+  it('Should allow you to add a stat to an activity you own', function (done) {
+    request(app).post('/api/activity/0/stats')
+    .auth("Reynard", "l3tsB4rkMor3")
+    .send({
+      "date": "7/11/17",
+      "numberPerformed": 12
+    })
+    .expect({
+      "success": true,
+      "date": "7/11/17",
+      "numberPerformed": 12
+    })
+    .end(done)
+  })
+  it('Should allow you to add a stat to an activity you own', function (done) {
+    request(app).post('/api/activity/0/stats')
+    .auth("Reynard", "l3tsB4rkMor3")
+    .send({
+      "date": "7/12/17",
+      "numberPerformed": 1000
+    })
+    .expect({
+      "success": true,
+      "date": "7/12/17",
+      "numberPerformed": 1000
+    })
+    .end(done)
+  })
+  it('Should allow you to add a stat to an activity you own', function (done) {
+    request(app).post('/api/activity/1/stats')
+    .auth("Seymour", "l3tsE4tL3aves")
+    .send({
+      "date": "7/11/17",
+      "numberPerformed": 10
+    })
+    .expect({
+      "success": true,
+      "date": "7/11/17",
+      "numberPerformed": 10
+    })
+    .end(done)
+  })
+  it('Should allow you to add a stat to an activity you own', function (done) {
+    request(app).post('/api/activity/2/stats')
+    .auth("Reynard", "l3tsB4rkMor3")
+    .send({
+      "date": "7/11/17",
+      "numberPerformed": 4
+    })
+    .expect({
+      "success": true,
+      "date": "7/11/17",
+      "numberPerformed": 4
+    })
+    .end(done)
+  })
+})
