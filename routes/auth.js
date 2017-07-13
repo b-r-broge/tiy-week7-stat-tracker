@@ -7,7 +7,7 @@ const statsRoute = require('./stats');
 
 const passport = require('passport');
 const BasicStrategy = require('passport-http').BasicStrategy;
-const bcrypt = require('bcryptjs');
+const bCrypt = require('bcryptjs');
 
 // taken and slightly modified from -
 // https://github.com/jaredhanson/passport-http
@@ -15,19 +15,25 @@ const bcrypt = require('bcryptjs');
 // https://www.npmjs.com/package/bcryptjs
 passport.use('basic', new BasicStrategy(
   function(user, password, done) {
+    var isValid = (usrPass, pass) => {
+      return bCrypt.compareSync(pass, usrPass);
+    }
     Users.findOne({
       username: user
     }, function(err, user) {
-      if (err) {
+       if (err) {
         return done(err);
       }
       if (!user) {
         return done(null, false);
       }
-      var hash = bcrypt.hashSync(password, 8)
-      if (!bcrypt.compareSync(user.password, hash)) {
+      if (!isValid(user.password, password)) {
         return done(null, false);
       }
+      // var hash = bcrypt.hashSync(password, 8)
+      // if (!bcrypt.compareSync(user.password, hash)) {
+      //   return done(null, false);
+      // }
       return done(null, user);
     });
   }
@@ -38,10 +44,10 @@ router.post('/signup', function(req, res) {
   // calculate uuid, and then add them to the database
   // res.json({"incomplete": true})
   Users.count({}, function(err, num) {
-    var passHash = bcrypt.hashSync(req.body.password, 8)
+    // var passHash = bCrypt.hashSync(req.body.password, 8)
     var newUser = new Users({
       "username": req.body.username,
-      "password": passHash,
+      "password": req.body.password,
       "uuid": num
     })
     newUser.save().then(function(user) {
@@ -59,21 +65,9 @@ router.post('/signup', function(req, res) {
   })
 })
 
-// router.all('/invalid', function(req, res) {
-//   res.status(401).json({
-//     "success": false,
-//     "error": "Incorrect Username or Password"
-//   })
-// })
-//
-// router.use('/*', passport.authenticate('basic', {
-//   session: false
-// }), function(req, res, next) {
-//   console.log('checking credentials');
-//   next();
-// })
-
 // can probably put the passport.authenticate into this use?
-router.use(statsRoute)
+router.use( passport.authenticate('basic', {
+  session: false
+}), statsRoute)
 
 module.exports = router;

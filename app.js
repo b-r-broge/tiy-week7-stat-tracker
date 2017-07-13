@@ -6,6 +6,9 @@ const config = require('./config/config.json')[env]
 
 const app = express();
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
 const authRoute = require('./routes/auth');
 
