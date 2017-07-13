@@ -6,7 +6,7 @@ const Users = require('../models/users');
 const Activity = require('../models/activities');
 const Stats = require('../models/stats');
 
-router.get('/check', function (req, res) {
+router.get('/check', function(req, res) {
   console.log('in check function');
   res.json({
     "success": true,
@@ -14,7 +14,7 @@ router.get('/check', function (req, res) {
   })
 })
 
-router.post('/activity/:id/stats', function (req, res) {
+router.post('/activity/:id/stats', function(req, res) {
   // add a new stat to an activity, verify the user owns
   // the activity before adding to db
   Users.findOne({
@@ -35,20 +35,47 @@ router.post('/activity/:id/stats', function (req, res) {
           "error": "Not Authorized"
         })
       }
-      var newStat = new Stats({
-        "date": req.body.date,
-        "numberPerformed": req.body.numberPerformed,
-        "activityId": req.params.id,
-        "userId": user.uuid
-      })
-      newStat.save().then(function(stat) {
-        return res.json({
-          "success": true,
-          "date": stat.date,
-          "numberPerformed": stat.numberPerformed
-        })
+      Stats.findOne({
+        "activityId": activity.activityId,
+        "userId": user.uuid,
+        "date": req.body.date
+      }).then(function(oldStat) {
+        if (oldStat) {
+          // update existing stat
+          Stats.updateOne(oldStat, {
+            $set: {
+              "numberPerformed": req.body.numberPerformed
+            }
+          }).then(function(updateStat) {
+            return res.json({
+              "success": true,
+              "date": oldStat.date,
+              "numberPerformed": req.body.numberPerformed
+            })
+          }).catch(function(err) {
+            console.log('error updating stat', err);
+            return res.json(err);
+          })
+        } else {
+          var newStat = new Stats({
+            "date": req.body.date,
+            "numberPerformed": req.body.numberPerformed,
+            "activityId": req.params.id,
+            "userId": user.uuid
+          })
+          newStat.save().then(function(stat) {
+            return res.json({
+              "success": true,
+              "date": stat.date,
+              "numberPerformed": stat.numberPerformed
+            })
+          }).catch(function(err) {
+            console.log('error saving new stat', err);
+            res.json(err);
+          })
+        }
       }).catch(function(err) {
-        console.log('error saving new stat', err);
+        console.log('error querying stats', err);
         res.json(err);
       })
     }).catch(function(err) {
@@ -100,7 +127,7 @@ router.post('/activity', function(req, res) {
   });
 })
 
-router.get('/activity', function (req, res) {
+router.get('/activity', function(req, res) {
   console.log('getting activities for', req.user.username);
   Users.findOne({
     "username": req.user.username

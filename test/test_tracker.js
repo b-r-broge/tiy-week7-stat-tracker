@@ -30,7 +30,7 @@ describe('POST /api/signup - add a user to the database', function() {
         "newUsername": "Reynard"
       })
       .end(done)
-  })
+  });
   it('Should add user "Seymour" to the user collection', function(done) {
     request(app).post('/api/signup')
       .send({
@@ -43,6 +43,12 @@ describe('POST /api/signup - add a user to the database', function() {
         "newUsername": "Seymour"
       })
       .end(done)
+  });
+  it('Should verify there are 2 users in the DB', function (done) {
+    Users.count({}).then(function(num) {
+      assert.equal(num, 2);
+      done();
+    })
   })
 })
 
@@ -109,6 +115,12 @@ describe('POST /api/activity', function () {
       "activity": "sleeping"
     })
     .end(done)
+  })
+  it('Should verify there are 3 activities in the DB', function (done) {
+    Activity.count({}).then(function(num) {
+      assert.equal(num, 3);
+      done();
+    })
   })
 })
 
@@ -198,16 +210,16 @@ describe('POST /activity/:id/stats', function() {
     })
     .end(done)
   })
-  it('Should allow you to add a stat to an activity you own', function (done) {
+  it('Should allow you to overwrite a stat you own', function (done) {
     request(app).post('/api/activity/0/stats')
     .auth("Reynard", "l3tsB4rkMor3")
     .send({
-      "date": "7/12/17",
+      "date": "7/11/17",
       "numberPerformed": 1000
     })
     .expect({
       "success": true,
-      "date": "7/12/17",
+      "date": "7/11/17",
       "numberPerformed": 1000
     })
     .end(done)
@@ -239,5 +251,11 @@ describe('POST /activity/:id/stats', function() {
       "numberPerformed": 4
     })
     .end(done)
+  })
+  it('Should verify there are 3 stats in the DB', function (done) {
+    Stats.count({}).then(function(num) {
+      assert.equal(num, 3);
+      done();
+    })
   })
 })

@@ -20,6 +20,6 @@ const statsSchema = new Schema({
   }
 })
 
-const Stats = mongoose.model('Stats', statsSchema);
+const Stats = mongoose.model('Stats', statsSchema, 'statistics');
 
 module.exports = Stats
