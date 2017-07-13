@@ -8,16 +8,15 @@ const app = express();
 app.use(bodyParser.json());
 
 const authRoute = require('./routes/auth');
-const statsRoute = require('./routes/stats');
 
 mongoose.Promise = require('bluebird');
 mongoose.connect(config.mongoUrl);
 
 app.use('/api', authRoute);
-app.use('/api', statsRoute);
 
+app.set('port', (process.env.PORT || 3000));
 if (require.main === module) {
-  app.listen(3000, function () {
+  app.listen(app.get('port'), function () {
     console.log("Server running at http://localhost:3000")
   })
 }

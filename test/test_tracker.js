@@ -82,8 +82,23 @@ describe('POST /api/activity', function () {
     .set('Accept', 'application/json')
     .expect(200)
     .expect({
-      "success": true
+      "success": true,
+      "activity": "barking"
     })
-
+    .end(done)
+  })
+  it('Should add an activity to the database', function (done) {
+    request(app).post('/api/activity')
+    .send({
+      "username": "Seymour",
+      "password": "l3tsE4tL3aves",
+      "activity": "sleeping"
+    })
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect({
+      "success": true,
+      "activity": "sleeping"
+    })
   })
 })

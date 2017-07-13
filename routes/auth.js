@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const Users = require('../models/users')
+const Users = require('../models/users');
+
+const statsRoute = require('./stats');
 
 const passport = require('passport');
 const BasicStrategy = require('passport-http').BasicStrategy;
@@ -70,5 +72,7 @@ router.post('/signup', function(req, res) {
 //   console.log('checking credentials');
 //   next();
 // })
+
+router.use(statsRoute)
 
 module.exports = router;
