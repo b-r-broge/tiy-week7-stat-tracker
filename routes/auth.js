@@ -73,6 +73,7 @@ router.post('/signup', function(req, res) {
 //   next();
 // })
 
+// can probably put the passport.authenticate into this use?
 router.use(statsRoute)
 
 module.exports = router;

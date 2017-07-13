@@ -3,13 +3,13 @@ const request = require("supertest");
 const app = require('../app');
 
 const Users = require('../models/users')
-const Activities = require('../models/activities')
+const Activity = require('../models/activities')
 const Stats = require('../models/stats')
 
 describe('POST /api/signup - add a user to the database', function() {
   before('reset the test database', function(done) {
     Users.remove({}).then(function() {});
-    Activities.remove({}).then(function() {});
+    Activity.remove({}).then(function() {});
     Stats.remove({}).then(function() {});
 
     setTimeout(function() {
@@ -72,7 +72,7 @@ describe('POST /api/signup - add a user to the database', function() {
 
 // Add a new activity for a user
 describe('POST /api/activity', function () {
-  it('Should add an activity with a uuid to the database', function (done) {
+  it('Should add an activity with a uuid to the database - verify one can be added', function (done) {
     request(app).post('/api/activity')
     .send({
       "username": "Reynard",
@@ -87,7 +87,7 @@ describe('POST /api/activity', function () {
     })
     .end(done)
   })
-  it('Should add an activity to the database', function (done) {
+  it('Should add an activity to the database - verify uuid and activityId are calculated separately', function (done) {
     request(app).post('/api/activity')
     .send({
       "username": "Seymour",
@@ -100,5 +100,22 @@ describe('POST /api/activity', function () {
       "success": true,
       "activity": "sleeping"
     })
+    .end(done)
   })
+  it('Should add an activity with a uuid to the database - verify activityId is unique', function (done) {
+    request(app).post('/api/activity')
+    .send({
+      "username": "Reynard",
+      "password": "l3tsB4rkMor3",
+      "activity": "sleeping"
+    })
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect({
+      "success": true,
+      "activity": "sleeping"
+    })
+    .end(done)
+  })
+
 })

@@ -8,8 +8,7 @@ const activitySchema = new Schema({
   },
   activityId: {
     type: Number,
-    required: true,
-    unique: true
+    required: true
   },
   userId: {
     type: Number,
