@@ -287,7 +287,7 @@ describe('PUT /api/activity/:id', function () {
     })
     .end(done)
   })
-  it('Shoudl update Seymours sleeping to being happy', function (done) {
+  it('Should update Seymours sleeping to being happy', function (done) {
     request(app).put('/api/activity/1')
     .auth("Seymour", "l3tsE4tL3aves")
     .send({
@@ -303,7 +303,100 @@ describe('PUT /api/activity/:id', function () {
 })
 
 // Get specific information about an activity
-// describe('GET /api/activty/:id', function () {})
+describe('GET /api/activty/:id', function () {
+  // add more dates for the stats
+  before('Add stats to be tracked', function (done) {
+    Stats.bulkWrite([
+      {
+        insertOne: {
+          document: {
+            date: "7/12/17",
+            volume: 50,
+            activityId: 0,
+            userId: 0,
+            statId: "00"
+          }
+        }
+      },
+      {
+        insertOne: {
+          document: {
+            date: "7/13/17",
+            volume: 500,
+            activityId: 0,
+            userId: 0,
+            statId: "00"
+          }
+        }
+      },
+      {
+        insertOne: {
+          document: {
+            date: "7/12/17",
+            volume: 24,
+            activityId: 1,
+            userId: 1,
+            statId: "11"
+          }
+        }
+      }
+    ]).then(function () {
+      done()
+    }).catch(function () {
+      done()
+    })
+  })
+  it('Should return information about Seymour being happy', function (done) {
+    request(app).get('/api/activity/1')
+    .auth("Seymour", "l3tsE4tL3aves")
+    .expect(200)
+    .expect({
+      "success": true,
+      "activity": {
+        "activityName": "being happy",
+        "activityMetric": "hours"
+      },
+      "stats": [
+        {
+          "date": "7/11/17",
+          "volume": 10
+        },
+        {
+          "date": "7/12/17",
+          "volume": 24
+        }
+      ]
+    })
+    .end(done)
+  })
+  it('Should return information about Reynard barking', function (done) {
+    request(app).get('/api/activity/0')
+    .auth("Reynard", "l3tsB4rkMor3")
+    .expect(200)
+    .expect({
+      "success": true,
+      "activity": {
+        "activityName": "barking",
+        "activityMetric": "barks per hour"
+      },
+      "stats": [
+        {
+          "date": "7/11/17",
+          "volume": 1000
+        },
+        {
+          "date": "7/12/17",
+          "volume": 50
+        },
+        {
+          "date": "7/13/17",
+          "volume": 500
+        }
+      ]
+    })
+    .end(done)
+  })
+})
 
 // Delete one day's worth of tracked activities
 // describe('DELETE /api/stats/:id', function () {})

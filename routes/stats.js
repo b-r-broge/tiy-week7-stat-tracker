@@ -131,6 +131,39 @@ router.post('/activity', function(req, res) {
   });
 })
 
+router.get('/activity/:id', function(req, res) {
+  Activity.findOne({
+    "activityId": req.params.id
+  }).then(function (activ) {
+    Stats.find({
+      "activityId": activ.activityId
+    }).then(function (stat) {
+      var statLst = []
+      stat.map(function (a) {
+        statLst.push({
+          "date": a.date,
+          "volume": a.volume
+        })
+      })
+      var outJson = {
+        "success": true,
+        "activity": {
+          "activityName": activ.activityName,
+          "activityMetric": activ.activityMetric
+        },
+        "stats": statLst
+      }
+      return res.json(outJson)
+    }).catch(function (err) {
+      console.log('error getting stats', err);
+      return res.json(err)
+    })
+  }).catch(function (err) {
+    console.log('error getting activities', err);
+    return res.json(err)
+  })
+})
+
 router.get('/activity', function(req, res) {
   console.log('getting activities for', req.user.username);
   Users.findOne({
@@ -161,13 +194,15 @@ router.get('/activity', function(req, res) {
   })
 })
 
-router.put('/activity/:id', function (req, res) {
+router.put('/activity/:id', function(req, res) {
   if (req.body.activityName) {
     Activity.updateOne({
       "activityId": req.params.id
-    }, {$set: {
-      "activityName": req.body.activityName
-    }}).then(function(activ) {
+    }, {
+      $set: {
+        "activityName": req.body.activityName
+      }
+    }).then(function(activ) {
       res.json({
         "success": true,
         "activityName": req.body.activityName
@@ -180,9 +215,11 @@ router.put('/activity/:id', function (req, res) {
   if (req.body.activityMetric) {
     Activity.updateOne({
       "activityId": req.params.id
-    }, {$set: {
-      "activityMetric": req.body.activityMetric
-    }}).then(function(activ) {
+    }, {
+      $set: {
+        "activityMetric": req.body.activityMetric
+      }
+    }).then(function(activ) {
       res.json({
         "success": true,
         "activityMetric": req.body.activityMetric
