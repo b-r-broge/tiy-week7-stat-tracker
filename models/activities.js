@@ -6,6 +6,10 @@ const activitySchema = new Schema({
     type: String,
     required: true
   },
+  activityMetric: {
+    type: String,
+    required: true
+  },
   activityId: {
     type: Number,
     required: true

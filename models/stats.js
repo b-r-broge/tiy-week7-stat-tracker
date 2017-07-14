@@ -6,7 +6,7 @@ const statsSchema = new Schema({
     type: String,
     required: true
   },
-  numberPerformed: {
+  volume: {
     type: Number,
     required: true
   },

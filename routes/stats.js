@@ -44,13 +44,13 @@ router.post('/activity/:id/stats', function(req, res) {
           // update existing stat
           Stats.updateOne(oldStat, {
             $set: {
-              "numberPerformed": req.body.numberPerformed
+              "volume": req.body.volume
             }
           }).then(function(updateStat) {
             return res.json({
               "success": true,
               "date": oldStat.date,
-              "numberPerformed": req.body.numberPerformed
+              "volume": req.body.volume
             })
           }).catch(function(err) {
             console.log('error updating stat', err);
@@ -59,7 +59,7 @@ router.post('/activity/:id/stats', function(req, res) {
         } else {
           var newStat = new Stats({
             "date": req.body.date,
-            "numberPerformed": req.body.numberPerformed,
+            "volume": req.body.volume,
             "activityId": req.params.id,
             "userId": user.uuid
           })
@@ -67,7 +67,7 @@ router.post('/activity/:id/stats', function(req, res) {
             return res.json({
               "success": true,
               "date": stat.date,
-              "numberPerformed": stat.numberPerformed
+              "volume": stat.volume
             })
           }).catch(function(err) {
             console.log('error saving new stat', err);
@@ -108,13 +108,15 @@ router.post('/activity', function(req, res) {
       var newActivity = new Activity({
         "userId": user.uuid,
         "activityId": num,
-        "activityName": req.body.activity
+        "activityName": req.body.activity,
+        "activityMetric": req.body.activityMetric
       })
       newActivity.save().then(function(newActiv) {
         console.log('activity added:', req.body.activity);
         return res.json({
           "success": true,
-          "activity": newActiv.activityName
+          "activity": newActiv.activityName,
+          "activityMetric": newActiv.activityMetric
         })
       }).catch(function(err) {
         console.log('error saving new activity', err);
@@ -139,6 +141,7 @@ router.get('/activity', function(req, res) {
       activities.map(function(a) {
         activOut.push({
           "activity": a.activityName,
+          "activityMetric": a.activityMetric,
           "activityLink": "/api/activity/" + a.activityId
         })
       })

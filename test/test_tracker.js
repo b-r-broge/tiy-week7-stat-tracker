@@ -78,13 +78,15 @@ describe('POST /api/activity', function () {
     request(app).post('/api/activity')
     .auth("Reynard", "l3tsB4rkMor3")
     .send({
-      "activity": "barking"
+      "activity": "barking",
+      "activityMetric": "frequency"
     })
     .set('Accept', 'application/json')
     .expect(200)
     .expect({
       "success": true,
-      "activity": "barking"
+      "activity": "barking",
+      "activityMetric": "frequency"
     })
     .end(done)
   })
@@ -92,13 +94,15 @@ describe('POST /api/activity', function () {
     request(app).post('/api/activity')
     .auth("Seymour", "l3tsE4tL3aves")
     .send({
-      "activity": "sleeping"
+      "activity": "sleeping",
+      "activityMetric": "hours"
     })
     .set('Accept', 'application/json')
     .expect(200)
     .expect({
       "success": true,
-      "activity": "sleeping"
+      "activity": "sleeping",
+      "activityMetric": "hours"
     })
     .end(done)
   })
@@ -106,13 +110,15 @@ describe('POST /api/activity', function () {
     request(app).post('/api/activity')
     .auth("Reynard", "l3tsB4rkMor3")
     .send({
-      "activity": "sleeping"
+      "activity": "sleeping",
+      "activityMetric": "hours"
     })
     .set('Accept', 'application/json')
     .expect(200)
     .expect({
       "success": true,
-      "activity": "sleeping"
+      "activity": "sleeping",
+      "activityMetric": "hours"
     })
     .end(done)
   })
@@ -135,10 +141,12 @@ describe("GET /api/activity", function () {
       "activities": [
         {
           "activity": "barking",
+          "activityMetric": "frequency",
           "activityLink": "/api/activity/0"
         },
         {
           "activity": "sleeping",
+          "activityMetric": "hours",
           "activityLink": "/api/activity/2"
         }
       ]
@@ -155,6 +163,7 @@ describe("GET /api/activity", function () {
       "activities": [
         {
           "activity": "sleeping",
+          "activityMetric": "hours",
           "activityLink": "/api/activity/1"
         }
       ]
@@ -169,7 +178,7 @@ describe('POST /activity/:id/stats', function() {
     .auth("Reynard", "l3tsB4rkMor3")
     .send({
       "date": "7/11/17",
-      "numberPerformed": 12
+      "volume": 12
     })
     .expect(401)
     .end(done)
@@ -178,7 +187,7 @@ describe('POST /activity/:id/stats', function() {
     request(app).post('/api/activity/1/stats')
     .send({
       "date": "7/11/17",
-      "numberPerformed": 12
+      "volume": 12
     })
     .expect(401)
     .end(done)
@@ -188,7 +197,7 @@ describe('POST /activity/:id/stats', function() {
     .auth("Reynard", "l3tsB4rkMor3")
     .send({
       "date": "7/11/17",
-      "numberPerformed": 12
+      "volume": 12
     })
     .expect({
       "success": false,
@@ -201,12 +210,12 @@ describe('POST /activity/:id/stats', function() {
     .auth("Reynard", "l3tsB4rkMor3")
     .send({
       "date": "7/11/17",
-      "numberPerformed": 12
+      "volume": 12
     })
     .expect({
       "success": true,
       "date": "7/11/17",
-      "numberPerformed": 12
+      "volume": 12
     })
     .end(done)
   })
@@ -215,12 +224,12 @@ describe('POST /activity/:id/stats', function() {
     .auth("Reynard", "l3tsB4rkMor3")
     .send({
       "date": "7/11/17",
-      "numberPerformed": 1000
+      "volume": 1000
     })
     .expect({
       "success": true,
       "date": "7/11/17",
-      "numberPerformed": 1000
+      "volume": 1000
     })
     .end(done)
   })
@@ -229,12 +238,12 @@ describe('POST /activity/:id/stats', function() {
     .auth("Seymour", "l3tsE4tL3aves")
     .send({
       "date": "7/11/17",
-      "numberPerformed": 10
+      "volume": 10
     })
     .expect({
       "success": true,
       "date": "7/11/17",
-      "numberPerformed": 10
+      "volume": 10
     })
     .end(done)
   })
@@ -243,12 +252,12 @@ describe('POST /activity/:id/stats', function() {
     .auth("Reynard", "l3tsB4rkMor3")
     .send({
       "date": "7/11/17",
-      "numberPerformed": 4
+      "volume": 4
     })
     .expect({
       "success": true,
       "date": "7/11/17",
-      "numberPerformed": 4
+      "volume": 4
     })
     .end(done)
   })
