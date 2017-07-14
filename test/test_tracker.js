@@ -314,7 +314,7 @@ describe('GET /api/activty/:id', function () {
             volume: 50,
             activityId: 0,
             userId: 0,
-            statId: "00"
+            statId: Math.floor(Math.random()*100000)
           }
         }
       },
@@ -325,7 +325,7 @@ describe('GET /api/activty/:id', function () {
             volume: 500,
             activityId: 0,
             userId: 0,
-            statId: "00"
+            statId: 456
           }
         }
       },
@@ -336,7 +336,7 @@ describe('GET /api/activty/:id', function () {
             volume: 24,
             activityId: 1,
             userId: 1,
-            statId: "11"
+            statId: 123
           }
         }
       }
@@ -399,7 +399,28 @@ describe('GET /api/activty/:id', function () {
 })
 
 // Delete one day's worth of tracked activities
-// describe('DELETE /api/stats/:id', function () {})
+describe('DELETE /api/stats/:id', function () {
+  it('should delete one day of Seymour being happy', function (done) {
+    request(app).delete('/api/stats/123')
+    .auth("Seymour", "l3tsE4tL3aves")
+    .expect(200)
+    .expect({
+      "success": true,
+      "date": "7/12/17"
+    })
+    .end(done)
+  })
+  it('should delete one day of Reynard barking', function (done) {
+    request(app).delete('/api/stats/456')
+    .auth("Reynard", "l3tsB4rkMor3")
+    .expect(200)
+    .expect({
+      "success": true,
+      "date": "7/13/17"
+    })
+    .end(done)
+  })
+})
 
 // Delete one activity entirely
 // describe('DELETE /api/activity/:id', function () {})

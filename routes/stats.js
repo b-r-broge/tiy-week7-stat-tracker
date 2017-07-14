@@ -6,7 +6,7 @@ const Users = require('../models/users');
 const Activity = require('../models/activities');
 const Stats = require('../models/stats');
 
-router.get('/check', function(req, res) {
+router.get('/check', function (req, res) {
   console.log('in check function');
   res.json({
     "success": true,
@@ -15,7 +15,7 @@ router.get('/check', function(req, res) {
 })
 
 // this needs some refactoring
-router.post('/activity/:id/stats', function(req, res) {
+router.post('/activity/:id/stats', function (req, res) {
   // add a new stat to an activity, verify the user owns
   // the activity before adding to db
   Users.findOne({
@@ -63,7 +63,7 @@ router.post('/activity/:id/stats', function(req, res) {
             "volume": req.body.volume,
             "activityId": req.params.id,
             "userId": user.uuid,
-            "statId": "" + user.uuid + req.params.id
+            "statId": Math.floor(Math.random()*100000)
           })
           newStat.save().then(function(stat) {
             return res.json({
@@ -90,7 +90,7 @@ router.post('/activity/:id/stats', function(req, res) {
   })
 })
 
-router.post('/activity', function(req, res) {
+router.post('/activity', function (req, res) {
   // add a new activity for a given user
   // expect username, password and activity
   // get user uuid from users collection, then add
@@ -131,7 +131,7 @@ router.post('/activity', function(req, res) {
   });
 })
 
-router.get('/activity/:id', function(req, res) {
+router.get('/activity/:id', function (req, res) {
   Activity.findOne({
     "activityId": req.params.id
   }).then(function (activ) {
@@ -164,7 +164,7 @@ router.get('/activity/:id', function(req, res) {
   })
 })
 
-router.get('/activity', function(req, res) {
+router.get('/activity', function (req, res) {
   console.log('getting activities for', req.user.username);
   Users.findOne({
     "username": req.user.username
@@ -194,7 +194,7 @@ router.get('/activity', function(req, res) {
   })
 })
 
-router.put('/activity/:id', function(req, res) {
+router.put('/activity/:id', function (req, res) {
   if (req.body.activityName) {
     Activity.updateOne({
       "activityId": req.params.id
@@ -230,5 +230,9 @@ router.put('/activity/:id', function(req, res) {
     })
   }
 })
+
+// router.delete('/stats/:id', function (req, res) {
+//
+// })
 
 module.exports = router;

@@ -19,8 +19,9 @@ const statsSchema = new Schema({
     required: true
   },
   statId: {
-    type: String,
-    required: true
+    type: Number,
+    required: true,
+    unique: true
   }
 })
 
