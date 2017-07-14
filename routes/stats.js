@@ -231,8 +231,19 @@ router.put('/activity/:id', function (req, res) {
   }
 })
 
-// router.delete('/stats/:id', function (req, res) {
-//
-// })
+router.delete('/stats/:id', function (req, res) {
+  Stats.deleteOne({
+    statId: req.params.id
+  }).then(function (suc) {
+    return res.json({
+      "success": true
+    })
+  }).catch(function (err) {
+    console.log('error deleting stat', err);
+    res.json(err)
+  })
+})
+
+router.delete('/activities/:id')
 
 module.exports = router;

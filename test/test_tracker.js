@@ -405,8 +405,7 @@ describe('DELETE /api/stats/:id', function () {
     .auth("Seymour", "l3tsE4tL3aves")
     .expect(200)
     .expect({
-      "success": true,
-      "date": "7/12/17"
+      "success": true
     })
     .end(done)
   })
@@ -415,12 +414,39 @@ describe('DELETE /api/stats/:id', function () {
     .auth("Reynard", "l3tsB4rkMor3")
     .expect(200)
     .expect({
-      "success": true,
-      "date": "7/13/17"
+      "success": true
     })
     .end(done)
+  })
+  it('Should verify there are 4 Statistics', function (done) {
+    Stats.count({}).then(function(num) {
+      assert.equal(num, 4);
+      done();
+    })
   })
 })
 
 // Delete one activity entirely
-// describe('DELETE /api/activity/:id', function () {})
+describe('DELETE /api/activity/:id', function () {
+  it('should delete Reynards barking', function (done) {
+    request(app).delete('/api/activity/1')
+    .auth("Reynard", "l3tsB4rkMor3")
+    .expect(200)
+    .expect({
+      "success": true
+    })
+    .end(done)
+  })
+  it('Should verify there are 2 activities', function (done) {
+    Activity.count({}).then(function(num) {
+      assert.equal(num, 2);
+      done();
+    })
+  })
+  it('Should verify there are 2 Statistics remaining ', function (done) {
+    Stats.count({}).then(function(num) {
+      assert.equal(num, 2);
+      done();
+    })
+  })
+})
