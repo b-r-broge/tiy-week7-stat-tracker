@@ -14,6 +14,7 @@ router.get('/check', function(req, res) {
   })
 })
 
+// this needs some refactoring
 router.post('/activity/:id/stats', function(req, res) {
   // add a new stat to an activity, verify the user owns
   // the activity before adding to db
@@ -62,7 +63,7 @@ router.post('/activity/:id/stats', function(req, res) {
             "volume": req.body.volume,
             "activityId": req.params.id,
             "userId": user.uuid,
-            "statId": parseInt("" + user.uuid + req.params.id)
+            "statId": "" + user.uuid + req.params.id
           })
           newStat.save().then(function(stat) {
             return res.json({
@@ -160,6 +161,8 @@ router.get('/activity', function(req, res) {
   })
 })
 
-
+router.put('/activity/:id', function (req, res) {
+  
+})
 
 module.exports = router;

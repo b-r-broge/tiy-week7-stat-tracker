@@ -287,6 +287,19 @@ describe('PUT /api/activity/:id', function () {
     })
     .end(done)
   })
+  it('Shoudl update Seymours sleeping to being happy', function (done) {
+    request(app).put('/api/activity/1')
+    .auth("Seymour", "l3tsE4tL3aves")
+    .send({
+      "activityName": "being happy"
+    })
+    .expect(200)
+    .expect({
+      "success": true,
+      "activityName": "being happy"
+    })
+    .end(done)
+  })
 })
 
 // Get specific information about an activity

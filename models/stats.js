@@ -19,7 +19,7 @@ const statsSchema = new Schema({
     required: true
   },
   statId: {
-    type: Number,
+    type: String,
     required: true
   }
 })
