@@ -400,6 +400,12 @@ describe('GET /api/activty/:id', function () {
 
 // Delete one day's worth of tracked activities
 describe('DELETE /api/stats/:id', function () {
+  it('should prevent Reynards from deleting Seymours stats', function (done) {
+    request(app).delete('/api/stats/123')
+    .auth("Reynard", "l3tsB4rkMor3")
+    .expect(401)
+    .end(done)
+  })
   it('should delete one day of Seymour being happy', function (done) {
     request(app).delete('/api/stats/123')
     .auth("Seymour", "l3tsE4tL3aves")
@@ -429,12 +435,18 @@ describe('DELETE /api/stats/:id', function () {
 // Delete one activity entirely
 describe('DELETE /api/activity/:id', function () {
   it('should delete Reynards barking', function (done) {
-    request(app).delete('/api/activity/1')
+    request(app).delete('/api/activity/0')
     .auth("Reynard", "l3tsB4rkMor3")
     .expect(200)
     .expect({
       "success": true
     })
+    .end(done)
+  })
+  it('should prevent Reynards from deleting Seymours activity', function (done) {
+    request(app).delete('/api/activity/1')
+    .auth("Reynard", "l3tsB4rkMor3")
+    .expect(401)
     .end(done)
   })
   it('Should verify there are 2 activities', function (done) {
