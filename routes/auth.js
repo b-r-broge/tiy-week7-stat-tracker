@@ -4,6 +4,9 @@ const router = express.Router();
 const Users = require('../models/users');
 
 const statsRoute = require('./stats');
+const postRoute = require('./post')
+const getRoute = require('./get')
+const deleteRoute = require('./delete')
 
 const passport = require('passport');
 const BasicStrategy = require('passport-http').BasicStrategy;
@@ -60,9 +63,18 @@ router.post('/signup', function(req, res) {
   })
 })
 
-// authenticate before using the stats routes
+// authenticate before using the routes
 router.use( passport.authenticate('basic', {
   session: false
 }), statsRoute)
+router.use( passport.authenticate('basic', {
+  session: false
+}), postRoute)
+router.use( passport.authenticate('basic', {
+  session: false
+}), getRoute)
+router.use( passport.authenticate('basic', {
+  session: false
+}), deleteRoute)
 
 module.exports = router;
