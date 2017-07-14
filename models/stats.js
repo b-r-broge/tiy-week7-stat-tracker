@@ -17,6 +17,10 @@ const statsSchema = new Schema({
   userId: {
     type: Number,
     required: true
+  },
+  statId: {
+    type: Number,
+    required: true
   }
 })
 

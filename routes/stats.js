@@ -61,7 +61,8 @@ router.post('/activity/:id/stats', function(req, res) {
             "date": req.body.date,
             "volume": req.body.volume,
             "activityId": req.params.id,
-            "userId": user.uuid
+            "userId": user.uuid,
+            "statId": parseInt("" + user.uuid + req.params.id)
           })
           newStat.save().then(function(stat) {
             return res.json({

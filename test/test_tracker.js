@@ -6,6 +6,7 @@ const Users = require('../models/users')
 const Activity = require('../models/activities')
 const Stats = require('../models/stats')
 
+// Sign up a new user
 describe('POST /api/signup - add a user to the database', function() {
   before('reset the test database', function(done) {
     Users.remove({}).then(function() {});
@@ -130,6 +131,7 @@ describe('POST /api/activity', function () {
   })
 })
 
+// Get all the activities for a user
 describe("GET /api/activity", function () {
   it('should return all activities for Reynard', function(done) {
     request(app).get('/api/activity')
@@ -172,7 +174,8 @@ describe("GET /api/activity", function () {
   })
 })
 
-describe('POST /activity/:id/stats', function() {
+// Add a stat to a given activity and day
+describe('POST /api/activity/:id/stats', function() {
   it('should deny modifiying an activity you don\'t own', function (done) {
     request(app).post('/api/activity/1/stats')
     .auth("Reynard", "l3tsB4rkMor3")
@@ -268,3 +271,29 @@ describe('POST /activity/:id/stats', function() {
     })
   })
 })
+
+// Update activity name or metric
+describe('PUT /api/activity/:id', function () {
+  it('Should update Reynards barking frequency to barks per hour', function (done) {
+    request(app).put('/api/activity/0')
+    .auth("Reynard", "l3tsB4rkMor3")
+    .send({
+      "activityMetric": "barks per hour"
+    })
+    .expect(200)
+    .expect({
+      "success": true,
+      "activityMetric": "barks per hour"
+    })
+    .end(done)
+  })
+})
+
+// Get specific information about an activity
+// describe('GET /api/activty/:id', function () {})
+
+// Delete one day's worth of tracked activities
+// describe('DELETE /api/stats/:id', function () {})
+
+// Delete one activity entirely
+// describe('DELETE /api/activity/:id', function () {})
